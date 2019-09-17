@@ -38,5 +38,5 @@ public interface UserMapper {
     int updateByUserNameAndPassword(@Param("username")String username, @Param("passwordNew")String passwordNew);
 
     //根据用户id查询密码是否正确
-    int selectByIdAndPassword(@Param("id")Integer id, @Param("passwordOId")String passwordOId);
+    int selectByIdAndPassword(@Param("id")Integer id, @Param("password")String password);
 }

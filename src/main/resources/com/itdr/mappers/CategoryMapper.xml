@@ -19,10 +19,12 @@
     from neuedu_category
     where id = #{id,jdbcType=INTEGER}
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from neuedu_category
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
   <insert id="insert" parameterType="com.itdr.pojo.Category" >
     insert into neuedu_category (id, parent_id, name, 
       status, sort_order, create_time, 
@@ -31,6 +33,7 @@
       #{status,jdbcType=BIT}, #{sortOrder,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
+
   <insert id="insertSelective" parameterType="com.itdr.pojo.Category" >
     insert into neuedu_category
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -80,6 +83,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.itdr.pojo.Category" >
     update neuedu_category
     <set >
@@ -104,6 +108,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.itdr.pojo.Category" >
     update neuedu_category
     set parent_id = #{parentId,jdbcType=INTEGER},
@@ -114,4 +119,61 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+<!--根据父ID查询所有一级子ID-->
+  <select id="selectByParentId" parameterType="integer" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from neuedu_category
+      where parent_id = #{pid}
+  </select>
+
+  <!--根据父ID查询是否有子节点-->
+  <select id="selectIntByParentId" parameterType="integer" resultType="java.lang.Integer">
+    select
+    count(id)
+    from neuedu_category
+      where parent_id = #{categoryId}
+  </select>
+
+  <!--根据分类ID查询是否存在-->
+  <select id="selectByCategoryId" parameterType="integer" resultType="java.lang.Integer">
+    select
+    count(id)
+    from neuedu_category
+    where id = #{categoryId}
+  </select>
+
+  <!--根据分类名称查询是否存在-->
+  <select id="selectByCategoryName" parameterType="string" resultType="java.lang.Integer">
+    select
+    count(id)
+    from neuedu_category
+    where name = #{categoryName}
+  </select>
+
+
+
+  <!--根据分类ID修改品类名字-->
+  <update id="updateByCategoryIdAndCategoryName" parameterType="map">
+   update neuedu_category
+    set
+      name = #{categoryName}
+  where id = #{categoryId}
+</update>
+
+  <!--添加商品分类节点-->
+  <insert id="insertByParentIdAndCategoryName" parameterType="map" >
+    insert into neuedu_category (parent_id,name,create_time,update_time)
+    values (#{parentId},#{categoryName},now(),now() )
+  </insert>
+
+
+  <!--删除分类-->
+  <delete id="delectByCategoryId" parameterType="java.lang.Integer" >
+    delete from neuedu_category
+    where id = #{categoryId}
+  </delete>
+
 </mapper>

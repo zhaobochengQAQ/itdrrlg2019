@@ -34,9 +34,9 @@ public class UserServiceImpl implements UserService {
             return ServerResponse.defeatedRS("用户不存在");
         }
 
-//        String md5Password = MD5Utils.getMD5Code(password);
+        String md5Password = MD5Utils.getMD5Code(password);
 //        根据用户名和密码查询用户是否存在
-        User u = userMapper.selectByUsernameAndPassword(username,password);
+        User u = userMapper.selectByUsernameAndPassword(username,md5Password);
 
         if (u == null){
             return ServerResponse.defeatedRS("账号或密码错误");
